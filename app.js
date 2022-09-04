@@ -24,5 +24,8 @@ app.post('/chapter-link-check', (req, res) => {
 })
 
 app.listen(3000, () => {
+    // setInterval(() => {
+    //     console.log('Testing')
+    // }, 2000)
     console.log('server listing on port 3000')
 })

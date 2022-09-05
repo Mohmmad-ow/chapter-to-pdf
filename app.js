@@ -1,12 +1,11 @@
 // Required modules for app
 const express = require('express');
 const bodyParser = require('body-parser');
-const cheerio = require('cheerio');
-const axios = require('axios');
-const pretty = require('pretty');
 const app = express();
 const ejs = require('ejs')
 const path = require('path')
+
+const scrapeDataAndWriteToPdf = require('./get-data.js')
 
 // app initiations
 
@@ -20,7 +19,14 @@ app.get('/', (req, res) => {
 
 app.post('/chapter-link-check', (req, res) => {
     const link = req.body.chapterLink;
-    console.log(link)
+    scrapeDataAndWriteToPdf(link, res)
+    
+})
+
+app.post('/download', (req, res) => {
+    const file = req.body.filePath
+    console.log(file)
+    res.download(file)
 })
 
 app.listen(3000, () => {

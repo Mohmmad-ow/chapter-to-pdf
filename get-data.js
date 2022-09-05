@@ -9,9 +9,9 @@ const path = require('path')
 let url ='https://noobchan.xyz/novel/kanojo-ga-senpai-ni-ntr-reta-no-de/chapter-50/';
 
 
+module.exports = 
 
-
-async function scrapeDataAndWriteToPdf(url) {
+async function (url, res) {
     try {
       // We make an async ver for the Page data
       const { data } = await axios.get(url);
@@ -19,6 +19,7 @@ async function scrapeDataAndWriteToPdf(url) {
       const $ = cheerio.load(data, null, false,{ ignoreWhitespace: true });
       // Chapter Title
       const title = $('.main-col h1').text()
+      const filePath = path.join(__dirname , "public" , "chapter-pdf" , title + '.pdf')
       // Chapter Content
       const text = $('.text-left p')
 
@@ -30,7 +31,7 @@ async function scrapeDataAndWriteToPdf(url) {
         
         let l = $(line).text();
         if (l[0] == "　") {
-          console.log("True")
+          
           l = l.slice(1)
           pdfDocument.fontSize(14)
             .text(l, {align:'left'})
@@ -42,10 +43,11 @@ async function scrapeDataAndWriteToPdf(url) {
         }
       });
       pdfDocument.end()
-      
+      res.render('download.ejs', {path: filePath})
     } catch (err) {
-      console.error(err);
+      console.log("There is an error " + err);
     }
   }
+
   // Invoke the above function
-  scrapeDataAndWriteToPdf(url);
+  // console.log(scrapeDataAndWriteToPdf(url));
